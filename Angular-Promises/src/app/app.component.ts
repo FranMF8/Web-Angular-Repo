@@ -3,6 +3,7 @@ import { StudentModel } from "./models/student";
 import { FormsModule, FormBuilder } from '@angular/forms';
 import { StudentService } from './services/student.service';
 import { HttpClient } from '@angular/common/http';
+import { waitForAsync } from '@angular/core/testing';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -42,7 +43,7 @@ changeStudent(toModifyStudent: StudentModel) {
     console.log(response);
     this.getAll();
   }, error => {
-    console.error(error);
+    console.error(error.error);
   });
 }
 
@@ -61,7 +62,7 @@ add() {
 }
 
 edit() {
-  this.changeStudent(this.selectedStudent);
+  this.changeStudent(this.selectedStudent)
   this.deselect();
 }
 
