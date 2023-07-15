@@ -30,31 +30,53 @@ getAll() {
 
 submitStudent(toAddStudent: StudentModel) {
   this.loginService.addStudent(toAddStudent).subscribe(response => {
-    console.log(response); // Muestra la respuesta en la consola para verificar su contenido
+    console.log(response);
     this.getAll();
   }, error => {
-    console.error(error); // Muestra el error en la consola para obtener más detalles
+    console.error(error);
   });
 }
 
+changeStudent(toModifyStudent: StudentModel) {
+  this.loginService.modifyStudent(toModifyStudent).subscribe(response => {
+    console.log(response);
+    this.getAll();
+  }, error => {
+    console.error(error);
+  });
+}
 
+deleteRequest(toDeleteId: number) {
+  this.loginService.deleteStudent(toDeleteId).subscribe(response => {
+    console.log(response);
+    this.getAll();
+  }, error => {
+    console.error(error);
+  });
+}
 
-addOrEdit() {
+add() {
   this.submitStudent(this.selectedStudent);
+  this.deselect();
+}
+
+edit() {
+  this.changeStudent(this.selectedStudent);
+  this.deselect();
+}
+
+deselect() {
   this.selectedStudent = new StudentModel();
 }
 
 openForEdit(student: StudentModel) {
   this.selectedStudent = student;
-  if(this.selectedStudent != null) {
-
-  }
 }
 
-delete() {
+deleteFromForm() {
   if(confirm('Estas seguro de querer eliminar al estudiante?')) {
-    this.studentArray = this.studentArray.filter(x => x != this.selectedStudent);
-  this.selectedStudent = new StudentModel();
+    this.deleteRequest(this.selectedStudent.id);
+  this.deselect();
   }
 }
 }

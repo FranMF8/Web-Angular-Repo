@@ -1,7 +1,7 @@
 <nav class="navbar navbar-dark bg-dark">
   <a href="/" class="navbar-brand">
     App estudiantes
-  </a>  
+  </a>
 </nav>
 
 <div class="container">
@@ -30,13 +30,27 @@
           <div class="form-group">
             <input type="text" [(ngModel)]="selectedStudent.email" placeholder="Inserta un email" class="form-control mt-1">
           </div>
-          <button (click)="addOrEdit()" class="btn btn-secondary mt-1">
+          <button
+          *ngIf="selectedStudent.id === 0"
+           (click)="add()" class="btn btn-secondary mt-1">
             Enviar
           </button>
           <button
             *ngIf="selectedStudent.id !== 0"
+           class="btn btn-secondary mt-1"
+           (click)="edit()">
+            Modificar
+          </button>
+          <button
+            *ngIf="selectedStudent.id !== 0"
+           class="btn btn-secondary mt-1"
+           (click)="deselect()">
+            Quitar Seleccion
+          </button>
+          <button
+            *ngIf="selectedStudent.id !== 0"
            class="btn btn-danger mt-1"
-           (click)="delete()">
+           (click)="deleteFromForm()">
             Eliminar
           </button>
         </div>

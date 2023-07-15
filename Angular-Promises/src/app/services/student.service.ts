@@ -19,7 +19,7 @@ export class StudentService {
   }
 
   modifyStudent(student: StudentModel) {
-    return this.http.post(this.URL + "modify", student)
+    return this.http.post<any>(this.URL + "modify", student)
   }
 
   deleteStudent(id: number) {
