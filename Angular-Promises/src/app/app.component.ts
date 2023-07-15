@@ -1,38 +1,60 @@
-import { Component } from '@angular/core';
-import { Student } from "./models/student";
-import { FormsModule } from '@angular/forms';
-
+import { Component, OnInit } from '@angular/core';
+import { StudentModel } from "./models/student";
+import { FormsModule, FormBuilder } from '@angular/forms';
+import { StudentService } from './services/student.service';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-studentArray: Student[] = [
-  {id: 1, name: 'Francisco', dni: 42590936, email: "cejita678@gmail.com"},
-  {id: 2, name: 'Ana', dni: 1234556, email: "anita@gmail.com"},
-  {id: 3, name: 'Ivan', dni: 123456789, email: "ivanchoFortin@gmail.com"}
-]
-selectedStudent: Student = new Student();
+export class AppComponent implements OnInit {
 
-addOrEdit() {
+  constructor(private loginService: StudentService, private fb: FormBuilder)
+   {
 
-  if(this.selectedStudent.id === 0) {
-    this.selectedStudent.id = this.studentArray.length + 1;
-    this.studentArray.push(this.selectedStudent);
-  }
+   }
 
-  this.selectedStudent = new Student();
+studentArray!: StudentModel[]
+selectedStudent: StudentModel = new StudentModel();
+
+ngOnInit(): void {
+  this.getAll();
 }
 
-openForEdit(student: Student) {
+getAll() {
+  this.loginService.getAllStudents().subscribe( response => {
+    this.studentArray = response as StudentModel[];
+  })
+}
+
+submitStudent(toAddStudent: StudentModel) {
+  this.loginService.addStudent(toAddStudent).subscribe(response => {
+    console.log(response); // Muestra la respuesta en la consola para verificar su contenido
+    this.getAll();
+  }, error => {
+    console.error(error); // Muestra el error en la consola para obtener más detalles
+  });
+}
+
+
+
+addOrEdit() {
+  this.submitStudent(this.selectedStudent);
+  this.selectedStudent = new StudentModel();
+}
+
+openForEdit(student: StudentModel) {
   this.selectedStudent = student;
+  if(this.selectedStudent != null) {
+
+  }
 }
 
 delete() {
   if(confirm('Estas seguro de querer eliminar al estudiante?')) {
     this.studentArray = this.studentArray.filter(x => x != this.selectedStudent);
-  this.selectedStudent = new Student();
+  this.selectedStudent = new StudentModel();
   }
 }
 }
