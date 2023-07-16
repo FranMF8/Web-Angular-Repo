@@ -18,6 +18,9 @@ export class AppComponent implements OnInit {
 
 studentArray!: StudentModel[]
 selectedStudent: StudentModel = new StudentModel();
+dniFindActive: boolean = false;
+buttonText: string = "Buscar por DNI";
+foundStudent: StudentModel | undefined;
 
 ngOnInit(): void {
   this.getAll();
@@ -80,4 +83,24 @@ deleteFromForm() {
   this.deselect();
   }
 }
+
+findByDNIActivate() {
+  if(!this.dniFindActive) {
+    this.buttonText = "Agregar estudiante"
+  }
+  else {
+    this.buttonText = "Buscar por DNI"
+  }
+  this.dniFindActive = !this.dniFindActive;
+}
+
+findByDNI() {
+  this.foundStudent = this.studentArray.find((student) => student.dni === this.selectedStudent.dni)
+  if (this.foundStudent?.name) {
+    console.log(this.foundStudent.name);
+  } else {
+    console.log("Estudiante no encontrado");
+  }
+}
+
 }

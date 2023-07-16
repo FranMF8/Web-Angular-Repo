@@ -8,6 +8,11 @@
   <div class="row">
     <div class="col-md-8">
       <ul class="list-group mt-4">
+        <div class="list-group-item font-weight-bold">
+          <strong class="align-items-center">Estudiantes</strong>
+          <button (click)="getAll()" class="btn btn-secondary mt-1 float-end">Refrescar Lista</button>
+          <button (click)="findByDNIActivate()" class="btn btn-secondary mt-1 me-2 float-end">{{buttonText}}</button>
+        </div>
           <li
           *ngFor="let student of studentArray"
            class="list-group-item list-group-item-action"
@@ -16,7 +21,7 @@
             <span class="badge bg-dark">{{ student.id }}</span> {{ student.name }} - DNI: {{ student.dni }} - Email: {{ student.email }}
           </li>
       </ul>
-      <div class="card mt-4">
+      <div class="card mt-4"  *ngIf="!dniFindActive">
         <div class="card-body">
           <div class="card-title">
             Ingrese un nuevo alumno
@@ -37,7 +42,7 @@
           </button>
           <button
             *ngIf="selectedStudent.id !== 0"
-           class="btn btn-secondary mt-1"
+           class="btn btn-secondary mt-1 me-2"
            (click)="edit()">
             Modificar
           </button>
@@ -49,13 +54,36 @@
           </button>
           <button
             *ngIf="selectedStudent.id !== 0"
-           class="btn btn-danger mt-1"
+           class="btn btn-danger mt-1 float-end"
            (click)="deleteFromForm()">
             Eliminar
           </button>
         </div>
       </div>
+      <div class="card mt-4 float-start" *ngIf="dniFindActive">
+        <div class="card-body">
+          <div class="card-title">
+            Busqueda por DNI
+          </div>
+          <div class="form-group">
+            <input type="text" [(ngModel)]="selectedStudent.dni" placeholder="Inserta un dni" class="form-control mt-1">
+          </div>
+          <button
+           (click)="findByDNI()" class="btn btn-secondary mt-1 me-2">
+            Buscar
+          </button>
+          <button
+            *ngIf="selectedStudent.id !== 0"
+           class="btn btn-secondary mt-1 float-end"
+           (click)="deselect()">
+            Quitar Seleccion
+          </button>
+        </div>
+      </div>
     </div>
-    <div class="col-md-4"></div>
+
+    <div class="col-md-4">
+
+    </div>
   </div>
 </div>
