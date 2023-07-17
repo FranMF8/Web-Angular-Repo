@@ -87,7 +87,13 @@
         <div class="card mt-4 float-start" *ngIf="found">
           <div class="card-body">
             <div class="card-title">
-              <div class="list-group-item font-weight-bold"><strong>Datos del estudiante</strong></div>
+              <div class="list-group-item font-weight-bold"><strong>Datos del estudiante</strong><button class="btn btn-danger rounded-circle text-center float-end"
+                 style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px;"
+                 (click)="changeFound()"
+                 >
+                 X
+                </button>
+              </div>
               <div>
                 <div> </div>
                 <div>Nombre: {{foundStudent?.name}}</div>

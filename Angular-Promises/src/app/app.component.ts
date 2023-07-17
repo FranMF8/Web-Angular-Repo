@@ -53,7 +53,7 @@ submitStudent(toAddStudent: StudentModel) {
 }
 
 changeStudent(toModifyStudent: StudentModel) {
-  if(toModifyStudent != null && (toModifyStudent.name != null || toModifyStudent.name === "") && (toModifyStudent.dni != null || toModifyStudent.dni === 0) && (toModifyStudent.email != null || toModifyStudent.email === ""))
+  if((toModifyStudent.dni !== 0 || null) && (toModifyStudent.name !== "" || null) && (toModifyStudent.email !== "" || null))
   {
     this.loginService.modifyStudent(toModifyStudent).subscribe(response => {
       console.log(response);
@@ -62,6 +62,7 @@ changeStudent(toModifyStudent: StudentModel) {
       console.error(error.error);
     });
   }  else {
+    this.getAll()
     confirm('Datos invalidos')
   }
 
@@ -90,7 +91,7 @@ deselect() {
   this.selectedStudent = new StudentModel();
 }
 
-deselectChoose(toDeselectStudent: StudentModel) {
+deselectChoose(toDeselectStudent: StudentModel | undefined) {
   toDeselectStudent = new StudentModel();
 }
 
@@ -115,13 +116,17 @@ findByDNIActivate() {
   this.dniFindActive = !this.dniFindActive;
 }
 
+changeFound() {
+  this.found = !this.found;
+}
+
 findByDNI() {
   this.foundStudent = this.studentArray.find(student => student.dni == this.toFindStudent.dni)
   if (this.foundStudent?.name && this.foundStudent !== null) {
     this.deselectChoose(this.foundStudent);
-    this.found = true;
+    this.found = true
   } else {
-    this.found = false;
+    this.found = false
     confirm('Estudiante no encontrado')
   }
 }
