@@ -19,8 +19,12 @@ export class AppComponent implements OnInit {
 studentArray!: StudentModel[]
 selectedStudent: StudentModel = new StudentModel();
 dniFindActive: boolean = false;
-buttonText: string = "Buscar por DNI";
+buttonText: string = "🔍︎";
+listButtonText: string = "▲";
+toFindStudent: StudentModel = new StudentModel();
 foundStudent: StudentModel | undefined;
+found: boolean = false;
+listVisible: boolean = false;
 
 ngOnInit(): void {
   this.getAll();
@@ -33,21 +37,34 @@ getAll() {
 }
 
 submitStudent(toAddStudent: StudentModel) {
-  this.loginService.addStudent(toAddStudent).subscribe(response => {
-    console.log(response);
-    this.getAll();
-  }, error => {
+
+  if((toAddStudent.name != null || toAddStudent.name === "") && (toAddStudent.dni != null || toAddStudent.dni === 0) && (toAddStudent.email != null || toAddStudent.email === ""))
+  {
+    this.loginService.addStudent(toAddStudent).subscribe(response => {
+      console.log(response);
+      this.getAll();
+    }, error => {
     console.error(error);
-  });
+    });
+  } else {
+    confirm('Datos invalidos')
+  }
+
 }
 
 changeStudent(toModifyStudent: StudentModel) {
-  this.loginService.modifyStudent(toModifyStudent).subscribe(response => {
-    console.log(response);
-    this.getAll();
-  }, error => {
-    console.error(error.error);
-  });
+  if(toModifyStudent != null && (toModifyStudent.name != null || toModifyStudent.name === "") && (toModifyStudent.dni != null || toModifyStudent.dni === 0) && (toModifyStudent.email != null || toModifyStudent.email === ""))
+  {
+    this.loginService.modifyStudent(toModifyStudent).subscribe(response => {
+      console.log(response);
+      this.getAll();
+    }, error => {
+      console.error(error.error);
+    });
+  }  else {
+    confirm('Datos invalidos')
+  }
+
 }
 
 deleteRequest(toDeleteId: number) {
@@ -73,7 +90,11 @@ deselect() {
   this.selectedStudent = new StudentModel();
 }
 
-openForEdit(student: StudentModel) {
+deselectChoose(toDeselectStudent: StudentModel) {
+  toDeselectStudent = new StudentModel();
+}
+
+selectStudent(student: StudentModel) {
   this.selectedStudent = student;
 }
 
@@ -86,20 +107,34 @@ deleteFromForm() {
 
 findByDNIActivate() {
   if(!this.dniFindActive) {
-    this.buttonText = "Agregar estudiante"
+    this.buttonText = "+"
   }
   else {
-    this.buttonText = "Buscar por DNI"
+    this.buttonText = "🔍︎"
   }
   this.dniFindActive = !this.dniFindActive;
 }
 
 findByDNI() {
-  this.foundStudent = this.studentArray.find((student) => student.dni === this.selectedStudent.dni)
-  if (this.foundStudent?.name) {
-    console.log(this.foundStudent.name);
+  this.foundStudent = this.studentArray.find(student => student.dni == this.toFindStudent.dni)
+  if (this.foundStudent?.name && this.foundStudent !== null) {
+    this.deselectChoose(this.foundStudent);
+    this.found = true;
   } else {
-    console.log("Estudiante no encontrado");
+    this.found = false;
+    confirm('Estudiante no encontrado')
+  }
+}
+
+showList() {
+
+  if(this.listVisible) {
+    this.listButtonText = "▲";
+    this.listVisible = false;
+  }
+  else if(!this.listVisible) {
+    this.listButtonText = "▼";
+    this.listVisible = true;
   }
 }
 

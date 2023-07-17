@@ -10,21 +10,24 @@
       <ul class="list-group mt-4">
         <div class="list-group-item font-weight-bold">
           <strong class="align-items-center">Estudiantes</strong>
-          <button (click)="getAll()" class="btn btn-secondary mt-1 float-end">Refrescar Lista</button>
+          <button (click)="showList()" class="btn btn-secondary mt-1 me-2 float-end">{{listButtonText}}</button>
+          <button (click)="getAll()"  class="btn btn-secondary mt-1 me-2 float-end">↻</button>
           <button (click)="findByDNIActivate()" class="btn btn-secondary mt-1 me-2 float-end">{{buttonText}}</button>
         </div>
-          <li
+          <div *ngIf="!listVisible">
+            <li
           *ngFor="let student of studentArray"
            class="list-group-item list-group-item-action"
-           (click)="openForEdit(student)"
+           (click)="selectStudent(student)"
            [class.active]="student == selectedStudent">
-            <span class="badge bg-dark">{{ student.id }}</span> {{ student.name }} - DNI: {{ student.dni }} - Email: {{ student.email }}
+            <span class="badge bg-dark">{{ student.id }} </span> {{ student.name }} - DNI: {{ student.dni }} - Email: {{ student.email }}
           </li>
+          </div>
       </ul>
       <div class="card mt-4"  *ngIf="!dniFindActive">
         <div class="card-body">
           <div class="card-title">
-            Ingrese un nuevo alumno
+            <strong>Ingrese un nuevo alumno</strong>
           </div>
           <div class="form-group">
             <input type="text" [(ngModel)]="selectedStudent.name" placeholder="Inserta un nombre" class="form-control">
@@ -38,7 +41,7 @@
           <button
           *ngIf="selectedStudent.id === 0"
            (click)="add()" class="btn btn-secondary mt-1">
-            Enviar
+            Enviar →
           </button>
           <button
             *ngIf="selectedStudent.id !== 0"
@@ -60,30 +63,41 @@
           </button>
         </div>
       </div>
-      <div class="card mt-4 float-start" *ngIf="dniFindActive">
-        <div class="card-body">
-          <div class="card-title">
-            Busqueda por DNI
+      <div *ngIf="dniFindActive">
+        <div class="card mt-4 float-start me-4">
+          <div class="card-body">
+            <div class="card-title">
+              <strong>Busqueda por DNI</strong>
+            </div>
+            <div class="form-group">
+              <input type="text" [(ngModel)]="toFindStudent.dni" placeholder="Inserta un dni" class="form-control mt-1">
+            </div>
+            <button
+             (click)="findByDNI()" class="btn btn-secondary mt-1 me-2">
+              Buscar
+            </button>
+            <button
+              *ngIf="selectedStudent.id !== 0"
+             class="btn btn-secondary mt-1 float-end"
+             (click)="deselect()">
+              Quitar Seleccion
+            </button>
           </div>
-          <div class="form-group">
-            <input type="text" [(ngModel)]="selectedStudent.dni" placeholder="Inserta un dni" class="form-control mt-1">
+        </div>
+        <div class="card mt-4 float-start" *ngIf="found">
+          <div class="card-body">
+            <div class="card-title">
+              <div class="list-group-item font-weight-bold"><strong>Datos del estudiante</strong></div>
+              <div>
+                <div> </div>
+                <div>Nombre: {{foundStudent?.name}}</div>
+                <div>DNI: {{foundStudent?.dni}}</div>
+                <div>Email: {{foundStudent?.email}}</div>
+              </div>
+            </div>
           </div>
-          <button
-           (click)="findByDNI()" class="btn btn-secondary mt-1 me-2">
-            Buscar
-          </button>
-          <button
-            *ngIf="selectedStudent.id !== 0"
-           class="btn btn-secondary mt-1 float-end"
-           (click)="deselect()">
-            Quitar Seleccion
-          </button>
         </div>
       </div>
-    </div>
-
-    <div class="col-md-4">
-
     </div>
   </div>
 </div>
