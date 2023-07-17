@@ -1,9 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { StudentModel } from "./models/student";
-import { FormsModule, FormBuilder } from '@angular/forms';
 import { StudentService } from './services/student.service';
-import { HttpClient } from '@angular/common/http';
-import { waitForAsync } from '@angular/core/testing';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -11,7 +8,7 @@ import { waitForAsync } from '@angular/core/testing';
 })
 export class AppComponent implements OnInit {
 
-  constructor(private loginService: StudentService, private fb: FormBuilder)
+  constructor(private loginService: StudentService, private renderer: Renderer2)
    {
 
    }
@@ -29,7 +26,6 @@ listVisible: boolean = false;
 ngOnInit(): void {
   this.getAll();
 }
-
 getAll() {
   this.loginService.getAllStudents().subscribe( response => {
     this.studentArray = response as StudentModel[];
@@ -53,7 +49,7 @@ submitStudent(toAddStudent: StudentModel) {
 }
 
 changeStudent(toModifyStudent: StudentModel) {
-  if((toModifyStudent.dni !== 0 || null) && (toModifyStudent.name !== "" || null) && (toModifyStudent.email !== "" || null))
+  if((toModifyStudent.dni !== 0 && toModifyStudent.dni != null) && (toModifyStudent.name !== "" && toModifyStudent.name != null) && (toModifyStudent.email !== "" && toModifyStudent.email != null))
   {
     this.loginService.modifyStudent(toModifyStudent).subscribe(response => {
       console.log(response);
@@ -89,14 +85,23 @@ edit() {
 
 deselect() {
   this.selectedStudent = new StudentModel();
+  this.found = false;
 }
 
 deselectChoose(toDeselectStudent: StudentModel | undefined) {
   toDeselectStudent = new StudentModel();
+  this.found = false;
 }
 
 selectStudent(student: StudentModel) {
-  this.selectedStudent = student;
+  if(student !== this.selectedStudent) {
+    this.selectedStudent = student;
+    this.foundStudent = student;
+    this.found = true;
+  } else {
+    this.deselect()
+  }
+
 }
 
 deleteFromForm() {
@@ -117,7 +122,13 @@ findByDNIActivate() {
 }
 
 changeFound() {
-  this.found = !this.found;
+  if(this.found) {
+    this.found = false;
+    this.foundStudent = new StudentModel();
+    this.deselect();
+  } else {
+    this.found = true;
+  }
 }
 
 findByDNI() {
@@ -141,6 +152,44 @@ showList() {
     this.listButtonText = "▼";
     this.listVisible = true;
   }
+}
+
+copyDataToClipboard(student: StudentModel | undefined) {
+  const clipboardData = `Nombre: ${student?.name}\nDNI: ${student?.dni}\nEmail: ${student?.email}`;
+
+  const tempTextarea = this.renderer.createElement('textarea');
+  this.renderer.setAttribute(tempTextarea, 'style', 'position: absolute; top: -9999px');
+  this.renderer.appendChild(document.body, tempTextarea);
+
+  tempTextarea.value = clipboardData;
+  tempTextarea.select();
+  document.execCommand('copy');
+
+  this.renderer.removeChild(document.body, tempTextarea);
+
+  confirm('Texto copiado');
+}
+
+copyEmails() {
+  var emailsChain = "";
+  this.studentArray.forEach(element => {
+    if(emailsChain === "") {
+      emailsChain = element.email;
+    } else {
+      emailsChain = emailsChain + ", " + element.email;
+    }
+  });
+  const tempTextarea = this.renderer.createElement('textarea');
+  this.renderer.setAttribute(tempTextarea, 'style', 'position: absolute; top: -9999px');
+  this.renderer.appendChild(document.body, tempTextarea);
+
+  tempTextarea.value = emailsChain;
+  tempTextarea.select();
+  document.execCommand('copy');
+
+  this.renderer.removeChild(document.body, tempTextarea);
+
+  confirm('Texto copiado');
 }
 
 }
