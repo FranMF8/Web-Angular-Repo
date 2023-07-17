@@ -8,10 +8,7 @@ import { StudentService } from './services/student.service';
 })
 export class AppComponent implements OnInit {
 
-  constructor(private loginService: StudentService, private renderer: Renderer2)
-   {
-
-   }
+  constructor(private loginService: StudentService, private renderer: Renderer2) {}
 
 studentArray!: StudentModel[]
 selectedStudent: StudentModel = new StudentModel();

@@ -27,7 +27,7 @@
       <div class="col">
         <ul class="list-group mt-4">
           <div class="list-group-item font-weight-bold">
-            <strong class="align-items-center">Estudiantes</strong>
+            <strong class="align-items-center">Estudiantes: </strong><span class="badge bg-secondary">{{studentArray.length}}</span>
             <button (click)="showList()" class="btn btn-secondary mt-1 me-2 float-end">{{listButtonText}}</button>
             <button (click)="getAll()" class="btn btn-secondary mt-1 me-2 float-end">↻</button>
             <button (click)="findByDNIActivate()" class="btn btn-secondary mt-1 me-2 float-end">{{buttonText}}</button>
@@ -85,7 +85,7 @@
           <div class="card-footer">
             <button
             (click)="findByDNI()" class="btn btn-secondary w-100">
-              Buscar
+            🔍︎ Buscar
             </button>
           </div>
         </div>
@@ -94,7 +94,7 @@
         <div class="card mt-4 h-100" *ngIf="found">
           <div class="card-header">
             <div class="list-group-item font-weight-bold d-flex justify-content-between">
-              <strong>Datos del estudiante</strong>
+              <strong>Datos del estudiante {{foundStudent?.id}}</strong>
               <button class="btn btn-danger rounded-circle" style="width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px;" (click)="changeFound()">
                 X
               </button>
@@ -102,9 +102,9 @@
           </div>
           <div class="card-body d-flex flex-column justify-content-center align-items-start">
             <div>
-              <div>Nombre: {{foundStudent?.name}}</div>
-              <div>DNI: {{foundStudent?.dni}}</div>
-              <div>Email: {{foundStudent?.email}}</div>
+              <div><strong>Nombre: </strong>{{foundStudent?.name}}</div>
+              <div><strong>DNI: </strong>{{foundStudent?.dni}}</div>
+              <div><strong>Email: </strong>{{foundStudent?.email}}</div>
             </div>
           </div>
           <div class="card-footer">
